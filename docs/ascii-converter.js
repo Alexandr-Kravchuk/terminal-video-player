@@ -69,18 +69,32 @@ class ASCIIConverter {
 
     renderToHTML(asciiData) {
         const { chars, colors } = asciiData;
-        let html = '';
+        const lines = [];
         
         for (let y = 0; y < chars.length; y++) {
+            const lineParts = [];
             for (let x = 0; x < chars[y].length; x++) {
                 const char = chars[y][x];
                 const color = colors[y][x];
-                html += `<span style="color:${color}">${char}</span>`;
+                lineParts.push(`<span style="color:${color}">${char}</span>`);
             }
-            html += '\n';
+            lines.push(lineParts.join(''));
         }
         
-        return html;
+        return lines.join('\n');
+    }
+
+    renderToCanvas(asciiData, ctx, charWidth, charHeight) {
+        const { chars, colors } = asciiData;
+        
+        ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+        
+        for (let y = 0; y < chars.length; y++) {
+            for (let x = 0; x < chars[y].length; x++) {
+                ctx.fillStyle = colors[y][x];
+                ctx.fillText(chars[y][x], x * charWidth, y * charHeight);
+            }
+        }
     }
 
     renderToText(asciiData) {

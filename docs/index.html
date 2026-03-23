@@ -63,6 +63,11 @@
                     Loop
                 </label>
 
+                <label>
+                    <input type="checkbox" id="useCanvasRendering" class="checkbox" checked>
+                    Canvas Mode (⚡ faster)
+                </label>
+
                 <button id="fullscreenBtn" class="btn btn-secondary">⛶ Fullscreen</button>
             </div>
         </div>
@@ -78,6 +83,7 @@
                 <button id="fsStopBtn" class="fs-btn">⏹ Stop</button>
                 <button id="fsExitBtn" class="fs-btn">✕ Exit Fullscreen</button>
             </div>
+            <canvas id="terminalCanvas" class="terminal-canvas"></canvas>
             <pre id="terminal" class="terminal"></pre>
         </div>
 

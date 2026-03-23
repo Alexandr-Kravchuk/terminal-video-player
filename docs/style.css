@@ -282,6 +282,32 @@ header p {
     max-height: 80vh;
 }
 
+.terminal-canvas {
+    display: none;
+    background: #000;
+    width: 100%;
+    height: 100%;
+    min-height: 400px;
+    max-height: 80vh;
+    image-rendering: pixelated;
+}
+
+.terminal-canvas.active {
+    display: block;
+}
+
+.terminal.hidden {
+    display: none;
+}
+    padding: 10px;
+    overflow: auto;
+    background: #000;
+    color: #00ff00;
+    white-space: pre;
+    min-height: 400px;
+    max-height: 80vh;
+}
+
 .terminal:empty::before {
     content: "Load a video to start...\n\nYou can:\n• Upload a video file from your device\n• Paste a video URL\n• Load the demo video\n\nAdjust settings above to customize the terminal size and quality.";
     color: #555;

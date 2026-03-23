@@ -4,7 +4,12 @@ class VideoPlayer {
         this.canvas = document.getElementById('canvas');
         this.ctx = this.canvas.getContext('2d', { willReadFrequently: true });
         this.terminal = document.getElementById('terminal');
+        this.terminalCanvas = document.getElementById('terminalCanvas');
+        this.terminalCtx = this.terminalCanvas.getContext('2d');
         this.converter = new ASCIIConverter();
+        
+        this.useCanvasRendering = true;
+        this.setupCanvasRendering();
         
         this.isPlaying = false;
         this.animationFrameId = null;
@@ -23,6 +28,13 @@ class VideoPlayer {
         
         this.initializeControls();
         this.initializeVideoEvents();
+    }
+
+    setupCanvasRendering() {
+        this.terminalCtx.font = '10px "Courier New", monospace';
+        this.terminalCtx.textBaseline = 'top';
+        this.charWidth = 6;
+        this.charHeight = 12;
     }
 
     initializeControls() {
@@ -47,6 +59,11 @@ class VideoPlayer {
         
         document.getElementById('loopVideo').addEventListener('change', (e) => {
             this.video.loop = e.target.checked;
+        });
+        
+        document.getElementById('useCanvasRendering').addEventListener('change', (e) => {
+            this.useCanvasRendering = e.target.checked;
+            this.switchRenderMode();
         });
         
         document.getElementById('fullscreenBtn').addEventListener('click', () => this.toggleFullscreen());
@@ -103,6 +120,8 @@ class VideoPlayer {
             
             console.log('Fullscreen terminal size:', this.currentSize);
             
+            this.updateCanvasSize();
+            
             fsPlayPauseBtn.textContent = this.isPlaying ? '⏸ Pause' : '▶ Play';
         } else {
             btn.textContent = '⛶ Fullscreen';
@@ -110,7 +129,36 @@ class VideoPlayer {
             if (this.savedSize) {
                 this.currentSize = { ...this.savedSize };
             }
+            
+            this.updateCanvasSize();
         }
+    }
+
+    switchRenderMode() {
+        if (this.useCanvasRendering) {
+            this.terminalCanvas.classList.add('active');
+            this.terminal.classList.add('hidden');
+            this.updateCanvasSize();
+        } else {
+            this.terminalCanvas.classList.remove('active');
+            this.terminal.classList.remove('hidden');
+        }
+    }
+
+    updateCanvasSize() {
+        const isFullscreen = !!document.fullscreenElement;
+        
+        if (isFullscreen) {
+            this.terminalCanvas.width = this.currentSize.width * this.charWidth;
+            this.terminalCanvas.height = this.currentSize.height * this.charHeight;
+            this.terminalCtx.font = '8px "Courier New", monospace';
+        } else {
+            this.terminalCanvas.width = this.currentSize.width * this.charWidth;
+            this.terminalCanvas.height = this.currentSize.height * this.charHeight;
+            this.terminalCtx.font = '10px "Courier New", monospace';
+        }
+        
+        this.terminalCtx.textBaseline = 'top';
     }
 
     initializeVideoEvents() {
@@ -184,6 +232,9 @@ class VideoPlayer {
         }
         
         try {
+            this.updateCanvasSize();
+            this.switchRenderMode();
+            
             this.isPlaying = true;
             await this.video.play();
             document.getElementById('playPauseBtn').textContent = '⏸ Pause';
@@ -269,7 +320,14 @@ class VideoPlayer {
             this.currentSize.height
         );
         
-        this.terminal.innerHTML = this.converter.renderToHTML(asciiData);
+        if (this.useCanvasRendering) {
+            const isFullscreen = !!document.fullscreenElement;
+            const charWidth = isFullscreen ? this.charWidth : this.charWidth;
+            const charHeight = isFullscreen ? 8 : this.charHeight;
+            this.converter.renderToCanvas(asciiData, this.terminalCtx, charWidth, charHeight);
+        } else {
+            this.terminal.innerHTML = this.converter.renderToHTML(asciiData);
+        }
     }
 
     startFPSCounter() {
