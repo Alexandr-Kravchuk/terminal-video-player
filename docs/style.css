@@ -207,7 +207,8 @@ header p {
     max-height: none;
     flex: 1;
     width: 100%;
-    overflow: auto;
+    overflow: hidden;
+    font-size: 8px;
 }
 
 .terminal-container:fullscreen .terminal-header {

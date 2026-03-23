@@ -88,12 +88,17 @@ class VideoPlayer {
             
             const screenWidth = window.screen.width;
             const screenHeight = window.screen.height;
-            const charWidth = 8;
-            const charHeight = 16;
+            const charWidth = 6;
+            const charHeight = 9;
+            const headerHeight = 50;
+            const controlsHeight = 60;
+            const padding = 40;
+            
+            const availableHeight = screenHeight - headerHeight - controlsHeight - padding;
             
             this.currentSize = {
-                width: Math.floor(screenWidth / charWidth),
-                height: Math.floor(screenHeight / charHeight) - 5
+                width: Math.floor(screenWidth / charWidth) - 4,
+                height: Math.floor(availableHeight / charHeight)
             };
             
             fsPlayPauseBtn.textContent = this.isPlaying ? '⏸ Pause' : '▶ Play';
