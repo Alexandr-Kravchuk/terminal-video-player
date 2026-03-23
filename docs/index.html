@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Terminal Video Player - ASCII Art Video in Browser</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🎬 Terminal Video Player</h1>
+            <p>Watch videos as colored ASCII art in your browser</p>
+        </header>
+
+        <div class="controls">
+            <div class="control-group">
+                <button id="playPauseBtn" class="btn btn-primary">▶ Play</button>
+                <button id="stopBtn" class="btn">⏹ Stop</button>
+                <input type="range" id="progressBar" class="progress-bar" min="0" max="100" value="0">
+                <span id="timeDisplay">0:00 / 0:00</span>
+            </div>
+
+            <div class="control-group">
+                <label for="videoFile" class="btn btn-secondary">📁 Upload Video</label>
+                <input type="file" id="videoFile" accept="video/*" style="display: none;">
+                <input type="text" id="videoUrl" placeholder="Or paste video URL..." class="url-input">
+                <button id="loadUrlBtn" class="btn btn-secondary">Load URL</button>
+                <button id="loadDemoBtn" class="btn btn-secondary">🎥 Load Demo</button>
+            </div>
+
+            <div class="settings-group">
+                <label>
+                    Terminal Size:
+                    <select id="terminalSize" class="select">
+                        <option value="small">Small (80x24)</option>
+                        <option value="medium" selected>Medium (120x40)</option>
+                        <option value="large">Large (160x60)</option>
+                        <option value="xlarge">X-Large (200x80)</option>
+                    </select>
+                </label>
+
+                <label>
+                    ASCII Detail:
+                    <select id="asciiDetail" class="select">
+                        <option value="low">Low (10 chars)</option>
+                        <option value="medium" selected>Medium (20 chars)</option>
+                        <option value="high">High (70 chars)</option>
+                    </select>
+                </label>
+
+                <label>
+                    Color Mode:
+                    <select id="colorMode" class="select">
+                        <option value="color" selected>Full Color</option>
+                        <option value="grayscale">Grayscale</option>
+                        <option value="green">Green Terminal</option>
+                    </select>
+                </label>
+
+                <label>
+                    <input type="checkbox" id="loopVideo" class="checkbox">
+                    Loop
+                </label>
+            </div>
+        </div>
+
+        <div class="terminal-container">
+            <div class="terminal-header">
+                <span class="terminal-title">terminal-video-player</span>
+                <span id="fpsDisplay" class="fps-display">FPS: 0</span>
+            </div>
+            <pre id="terminal" class="terminal"></pre>
+        </div>
+
+        <video id="videoElement" style="display: none;"></video>
+        <canvas id="canvas" style="display: none;"></canvas>
+
+        <footer>
+            <p>
+                <a href="https://github.com/Alexandr-Kravchuk/terminal-video-player" target="_blank">
+                    View on GitHub
+                </a>
+                | Made with ❤️ using pure JavaScript
+            </p>
+        </footer>
+    </div>
+
+    <script src="ascii-converter.js"></script>
+    <script src="video-player.js"></script>
+</body>
+</html>
