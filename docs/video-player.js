@@ -51,6 +51,7 @@ class VideoPlayer {
         
         document.getElementById('fullscreenBtn').addEventListener('click', () => this.toggleFullscreen());
         
+        document.getElementById('fsLoadDemoBtn').addEventListener('click', () => this.loadDemo());
         document.getElementById('fsPlayPauseBtn').addEventListener('click', () => this.togglePlayPause());
         document.getElementById('fsStopBtn').addEventListener('click', () => this.stop());
         document.getElementById('fsExitBtn').addEventListener('click', () => this.exitFullscreen());
