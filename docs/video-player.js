@@ -89,7 +89,7 @@ class VideoPlayer {
             const screenWidth = window.screen.width;
             const screenHeight = window.screen.height;
             const charWidth = 6;
-            const charHeight = 9;
+            const charHeight = 8;
             const headerHeight = 50;
             const controlsHeight = 60;
             const padding = 40;
@@ -98,8 +98,10 @@ class VideoPlayer {
             
             this.currentSize = {
                 width: Math.floor(screenWidth / charWidth) - 4,
-                height: Math.floor(availableHeight / charHeight)
+                height: Math.floor(availableHeight / charHeight) - 2
             };
+            
+            console.log('Fullscreen terminal size:', this.currentSize);
             
             fsPlayPauseBtn.textContent = this.isPlaying ? '⏸ Pause' : '▶ Play';
         } else {
