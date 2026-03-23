@@ -51,6 +51,10 @@ class VideoPlayer {
         
         document.getElementById('fullscreenBtn').addEventListener('click', () => this.toggleFullscreen());
         
+        document.getElementById('fsPlayPauseBtn').addEventListener('click', () => this.togglePlayPause());
+        document.getElementById('fsStopBtn').addEventListener('click', () => this.stop());
+        document.getElementById('fsExitBtn').addEventListener('click', () => this.exitFullscreen());
+        
         document.addEventListener('fullscreenchange', () => this.handleFullscreenChange());
     }
 
@@ -58,6 +62,7 @@ class VideoPlayer {
         const container = document.querySelector('.terminal-container');
         
         if (!document.fullscreenElement) {
+            this.savedSize = { ...this.currentSize };
             container.requestFullscreen().catch(err => {
                 console.error('Error attempting to enable fullscreen:', err);
                 alert('Could not enable fullscreen mode: ' + err.message);
@@ -67,12 +72,36 @@ class VideoPlayer {
         }
     }
 
+    exitFullscreen() {
+        if (document.fullscreenElement) {
+            document.exitFullscreen();
+        }
+    }
+
     handleFullscreenChange() {
         const btn = document.getElementById('fullscreenBtn');
+        const fsPlayPauseBtn = document.getElementById('fsPlayPauseBtn');
+        
         if (document.fullscreenElement) {
             btn.textContent = '⛶ Exit Fullscreen';
+            
+            const screenWidth = window.screen.width;
+            const screenHeight = window.screen.height;
+            const charWidth = 8;
+            const charHeight = 16;
+            
+            this.currentSize = {
+                width: Math.floor(screenWidth / charWidth),
+                height: Math.floor(screenHeight / charHeight) - 5
+            };
+            
+            fsPlayPauseBtn.textContent = this.isPlaying ? '⏸ Pause' : '▶ Play';
         } else {
             btn.textContent = '⛶ Fullscreen';
+            
+            if (this.savedSize) {
+                this.currentSize = { ...this.savedSize };
+            }
         }
     }
 
@@ -150,6 +179,7 @@ class VideoPlayer {
             this.isPlaying = true;
             await this.video.play();
             document.getElementById('playPauseBtn').textContent = '⏸ Pause';
+            document.getElementById('fsPlayPauseBtn').textContent = '⏸ Pause';
             this.lastFrameTime = performance.now();
             this.frameCount = 0;
             this.renderLoop();
@@ -165,6 +195,7 @@ class VideoPlayer {
         this.isPlaying = false;
         this.video.pause();
         document.getElementById('playPauseBtn').textContent = '▶ Play';
+        document.getElementById('fsPlayPauseBtn').textContent = '▶ Play';
         if (this.animationFrameId) {
             cancelAnimationFrame(this.animationFrameId);
             this.animationFrameId = null;
