@@ -149,8 +149,9 @@ class VideoPlayer {
         const isFullscreen = !!document.fullscreenElement;
         
         if (isFullscreen) {
+            const fsCharHeight = 8;
             this.terminalCanvas.width = this.currentSize.width * this.charWidth;
-            this.terminalCanvas.height = this.currentSize.height * this.charHeight;
+            this.terminalCanvas.height = this.currentSize.height * fsCharHeight;
             this.terminalCtx.font = '8px "Courier New", monospace';
         } else {
             this.terminalCanvas.width = this.currentSize.width * this.charWidth;
