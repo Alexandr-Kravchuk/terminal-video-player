@@ -56,6 +56,16 @@ class VideoPlayer {
             document.getElementById('progressBar').max = this.video.duration;
         });
         
+        this.video.addEventListener('canplay', () => {
+            console.log('Video is ready to play');
+        });
+        
+        this.video.addEventListener('error', (e) => {
+            console.error('Video error:', e);
+            const errorMsg = this.video.error ? this.video.error.message : 'Unknown error';
+            this.terminal.innerHTML = `<span style="color:#ff0000">Error loading video: ${errorMsg}</span>`;
+        });
+        
         this.video.addEventListener('timeupdate', () => {
             if (!this.seeking) {
                 document.getElementById('progressBar').value = this.video.currentTime;
@@ -104,19 +114,25 @@ class VideoPlayer {
         }
     }
 
-    play() {
+    async play() {
         if (!this.video.src) {
             alert('Please load a video first!');
             return;
         }
         
-        this.isPlaying = true;
-        this.video.play();
-        document.getElementById('playPauseBtn').textContent = '⏸ Pause';
-        this.lastFrameTime = performance.now();
-        this.frameCount = 0;
-        this.renderLoop();
-        this.startFPSCounter();
+        try {
+            this.isPlaying = true;
+            await this.video.play();
+            document.getElementById('playPauseBtn').textContent = '⏸ Pause';
+            this.lastFrameTime = performance.now();
+            this.frameCount = 0;
+            this.renderLoop();
+            this.startFPSCounter();
+        } catch (error) {
+            console.error('Error playing video:', error);
+            this.isPlaying = false;
+            alert('Error playing video: ' + error.message);
+        }
     }
 
     pause() {
