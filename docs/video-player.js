@@ -2,7 +2,7 @@ class VideoPlayer {
     constructor() {
         this.video = document.getElementById('videoElement');
         this.canvas = document.getElementById('canvas');
-        this.ctx = this.canvas.getContext('2d');
+        this.ctx = this.canvas.getContext('2d', { willReadFrequently: true });
         this.terminal = document.getElementById('terminal');
         this.converter = new ASCIIConverter();
         
