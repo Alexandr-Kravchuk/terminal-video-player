@@ -48,6 +48,32 @@ class VideoPlayer {
         document.getElementById('loopVideo').addEventListener('change', (e) => {
             this.video.loop = e.target.checked;
         });
+        
+        document.getElementById('fullscreenBtn').addEventListener('click', () => this.toggleFullscreen());
+        
+        document.addEventListener('fullscreenchange', () => this.handleFullscreenChange());
+    }
+
+    toggleFullscreen() {
+        const container = document.querySelector('.terminal-container');
+        
+        if (!document.fullscreenElement) {
+            container.requestFullscreen().catch(err => {
+                console.error('Error attempting to enable fullscreen:', err);
+                alert('Could not enable fullscreen mode: ' + err.message);
+            });
+        } else {
+            document.exitFullscreen();
+        }
+    }
+
+    handleFullscreenChange() {
+        const btn = document.getElementById('fullscreenBtn');
+        if (document.fullscreenElement) {
+            btn.textContent = '⛶ Exit Fullscreen';
+        } else {
+            btn.textContent = '⛶ Fullscreen';
+        }
     }
 
     initializeVideoEvents() {
